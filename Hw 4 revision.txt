@@ -1,0 +1,21 @@
+memo_change = {}    
+def fast_change(amount, coins):
+    '''Takes an amount and a list of coin denominations as input.
+    Returns the number of coins required to total the given amount.
+    Use memoization to improve performance.'''
+    
+    if (amount,tuple(coins)) in memo_change:
+        return memo_change[(amount,tuple(coins))]
+    elif amount == 0:
+        return 0
+    elif amount in coins:
+        memo_change[(amount,tuple(coins))] = 1
+        return 1
+    elif coins == [] or amount < 0:
+        return float("inf")
+    else:
+        useIt = 1 + fast_change(amount - coins[-1], coins)
+        loseIt = fast_change(amount, coins[:-1])
+        answer = min(useIt,loseIt)
+        memo_change[(amount,tuple(coins))] = answer
+        return answer
